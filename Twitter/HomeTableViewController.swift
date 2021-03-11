@@ -12,15 +12,18 @@ class HomeTableViewController: UITableViewController {
     
     var tweetArray = [NSDictionary]()
     var numberOfTweets: Int!
-    
-
     let myRefreshControl = UIRefreshControl()
+    
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.loadTweets()
+    }
     
 
     override func viewDidLoad() {
         super.viewDidLoad()
         loadTweets()
-        
         myRefreshControl.addTarget(self, action: #selector(loadTweets), for: .valueChanged)
         tableView.refreshControl = myRefreshControl
     }
@@ -55,7 +58,7 @@ class HomeTableViewController: UITableViewController {
         let myParams = ["count" : numberOfTweets]
         
         
-        TwitterAPICaller.client?.getDictionariesRequest(url: myUrl, parameters: myParams, success: { (tweets: [NSDictionary]) in
+        TwitterAPICaller.client?.getDictionariesRequest(url: myUrl, parameters: myParams as [String : Any], success: { (tweets: [NSDictionary]) in
             
             self.tweetArray.removeAll()
             for tweet in tweets {
